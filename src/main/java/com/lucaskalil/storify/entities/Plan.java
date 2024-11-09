@@ -1,5 +1,6 @@
 package com.lucaskalil.storify.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,11 +13,13 @@ import java.util.UUID;
 public class Plan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // Gera automaticamente um UUID
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false)
     private Long capacity;
 
     public Plan() {}
