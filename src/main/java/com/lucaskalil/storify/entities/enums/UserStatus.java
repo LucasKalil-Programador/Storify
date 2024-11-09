@@ -3,7 +3,8 @@ package com.lucaskalil.storify.entities.enums;
 public enum UserStatus {
     NO_PROBLEMS(1),
 	SUSPENDED(2),
-	BANNED(3);
+	BANNED(3),
+	CLOSED(4);
 
 	private int code;
 
