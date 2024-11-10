@@ -1,10 +1,13 @@
 package com.lucaskalil.storify.entities;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.lucaskalil.storify.entities.enums.PrivacySettings;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,12 +17,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
-import com.lucaskalil.storify.entities.enums.ModifyAccessSettings;
+import com.lucaskalil.storify.entities.enums.ModifySettings;
 
 @Entity
 @Table(name = "album")
@@ -35,7 +41,7 @@ public class Album {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ModifyAccessSettings modifyAccess;
+    private ModifySettings modifyAccess;
 
     @Column(nullable = false, length = 512)
     private String name;
@@ -52,9 +58,20 @@ public class Album {
     @Temporal(TemporalType.TIMESTAMP)
     private Instant modifiedDate;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "album_files",
+        joinColumns = @JoinColumn(name = "album_id"),
+        inverseJoinColumns = @JoinColumn(name = "file_id")
+    )
+    private List<SymbolicFile> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AlbumHasUser> albumUsers = new ArrayList<>();
+
     public Album() {}
 
-    public Album(PrivacySettings privacy, ModifyAccessSettings modifyAccess, String name, User owner,
+    public Album(PrivacySettings privacy, ModifySettings modifyAccess, String name, User owner,
             Instant createdDate, Instant modifiedDate) {
         this.privacy = privacy;
         this.modifyAccess = modifyAccess;
@@ -80,11 +97,11 @@ public class Album {
         this.privacy = privacy;
     }
 
-    public ModifyAccessSettings getModifyAccess() {
+    public ModifySettings getModifyAccess() {
         return modifyAccess;
     }
 
-    public void setModifyAccess(ModifyAccessSettings modifyAccess) {
+    public void setModifyAccess(ModifySettings modifyAccess) {
         this.modifyAccess = modifyAccess;
     }
 
@@ -120,6 +137,11 @@ public class Album {
         this.modifiedDate = modifiedDate;
     }
 
-    
-    
+    public List<SymbolicFile> getFiles() {
+        return files;
+    }
+
+    public List<AlbumHasUser> getAlbumUsers() {
+        return albumUsers;
+    }
 }

@@ -1,9 +1,12 @@
 package com.lucaskalil.storify.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.lucaskalil.storify.entities.enums.UserStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -61,6 +65,15 @@ public class User {
 
     @Column(nullable = false, length = 64)
     private String country;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<SymbolicFile> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<SymbolicFile> albums = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AlbumHasUser> albumUsers = new ArrayList<>();
     
     public User() {}
 
@@ -164,5 +177,17 @@ public class User {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<SymbolicFile> getFiles() {
+        return files;
+    }
+
+    public List<SymbolicFile> getAlbums() {
+        return albums;
+    }
+
+    public List<AlbumHasUser> getAlbumUsers() {
+        return albumUsers;
     }
 }

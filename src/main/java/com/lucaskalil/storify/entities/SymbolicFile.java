@@ -1,5 +1,7 @@
 package com.lucaskalil.storify.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.lucaskalil.storify.entities.enums.FileType;
@@ -13,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -40,6 +43,9 @@ public class SymbolicFile {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
     private User owner;
+
+    @ManyToMany(mappedBy = "files", fetch = FetchType.LAZY)
+    private List<Album> albums = new ArrayList<>();
 
     public SymbolicFile() {}
 
@@ -97,5 +103,9 @@ public class SymbolicFile {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
     }
 }
