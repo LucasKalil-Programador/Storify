@@ -44,14 +44,13 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Inicializando banco de dados...");
 
-        planRepository.save(new Plan("Plano Básico", 100L));
+        planRepository.save(new Plan("Plano Básico", 100L, "default"));
         planRepository.save(new Plan("Plano Avançado", 500L));
         Plan primiumPlan = planRepository.save(new Plan("Plano Premium", 1000L));
 
         User user = userRepository.save(new User("Lucas Kalil", "lucas.kalil2018@gmail.com", "pwd", primiumPlan, 0L, Instant.now(), Instant.now(), UserStatus.NO_PROBLEMS, "+55 (71) 99337-0283", "Brasil"));
    
         SymbolicFile file = symbolicFileRepository.save(new SymbolicFile("foto_em_familia.png", FileType.PNG, "AWS:0XGJWOCUAANSO", 1000L, user));
-        SymbolicFile file2 = symbolicFileRepository.save(new SymbolicFile("foto_em_familia.png", FileType.PNG, "AWS:0XGJWOCUAANSO", 1000L, user));
 
         Album album = albumRepository.save(new Album(PrivacySettings.PRIVATE, ModifySettings.OWNER, "fotos familia", user, Instant.now(), Instant.now()));
         

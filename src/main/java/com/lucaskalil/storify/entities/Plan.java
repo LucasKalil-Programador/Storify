@@ -6,13 +6,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "plan")
-public class Plan {
+public class Plan implements Serializable {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
@@ -22,7 +27,17 @@ public class Plan {
     @Column(nullable = false)
     private Long capacity;
 
+    @JsonIgnore
+    @Column(nullable = true, length = 255, unique = true)
+    private String metadata;
+
     public Plan() {}
+
+    public Plan(String name, Long capacity, String metadata) {
+        this.name = name;
+        this.capacity = capacity;
+        this.metadata = metadata;
+    }
 
     public Plan(String name, Long capacity) {
         this.name = name;
@@ -51,5 +66,13 @@ public class Plan {
 
     public void setCapacity(Long capacity) {
         this.capacity = capacity;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
     }
 }

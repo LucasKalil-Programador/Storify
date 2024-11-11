@@ -8,4 +8,7 @@ import com.lucaskalil.storify.entities.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    public boolean existsByEmail(String email);
+
+    public User findByEmail(String email);
 }

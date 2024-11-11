@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucaskalil.storify.entities.enums.UserStatus;
 
 import jakarta.persistence.CascadeType;
@@ -22,13 +23,15 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable{
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
@@ -38,10 +41,11 @@ public class User {
     @Column(nullable = false, length = 255, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false, length = 255)
     private String passwordHash;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", referencedColumnName = "id", nullable = false)
     private Plan plan;
 
@@ -60,18 +64,21 @@ public class User {
     @Column(nullable = false)
     private UserStatus status;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true, length = 20)
     private String phone;
 
-    @Column(nullable = false, length = 64)
+    @Column(nullable = true, length = 64)
     private String country;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SymbolicFile> files = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SymbolicFile> albums = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AlbumHasUser> albumUsers = new ArrayList<>();
     
