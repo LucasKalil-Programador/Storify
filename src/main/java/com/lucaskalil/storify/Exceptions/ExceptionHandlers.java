@@ -1,8 +1,9 @@
-package com.lucaskalil.storify.config;
+package com.lucaskalil.storify.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +29,13 @@ public class ExceptionHandlers {
     public ResponseEntity<Map<String, String>> handleJsonParseException(HttpMessageNotReadableException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("error", "Request body is missing or malformed. Ensure the JSON is properly formatted.");
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleJsonParseException(BadCredentialsException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

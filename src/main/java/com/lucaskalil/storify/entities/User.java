@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucaskalil.storify.entities.enums.UserStatus;
 
 import jakarta.persistence.CascadeType;
@@ -31,7 +30,6 @@ import java.time.Instant;
 public class User implements Serializable{
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
@@ -41,11 +39,10 @@ public class User implements Serializable{
     @Column(nullable = false, length = 255, unique = true)
     private String email;
 
-    @JsonIgnore
     @Column(nullable = false, length = 255)
     private String passwordHash;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id", referencedColumnName = "id", nullable = false)
     private Plan plan;
 
@@ -70,15 +67,12 @@ public class User implements Serializable{
     @Column(nullable = true, length = 64)
     private String country;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SymbolicFile> files = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SymbolicFile> albums = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AlbumHasUser> albumUsers = new ArrayList<>();
     

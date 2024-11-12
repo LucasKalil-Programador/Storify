@@ -1,4 +1,4 @@
-package com.lucaskalil.storify.dto;
+package com.lucaskalil.storify.controller.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class NewUserDTO {
+public class RegisterRequest {
 
     @NotBlank(message = "Username cannot be empty.")
     @Size(min = 2, max = 255, message = "Username must be between 2 and 255 characters.")
@@ -29,9 +29,9 @@ public class NewUserDTO {
     @Size(min = 2, max = 64, message = "Country name must be between 2 and 64 characters.")
     private String country;
 
-    public NewUserDTO() {}
+    public RegisterRequest() {}
 
-    public NewUserDTO(@NotBlank(message = "") @Size(min = 2, max = 255) String username,
+    public RegisterRequest(@NotBlank(message = "") @Size(min = 2, max = 255) String username,
             @NotBlank(message = "") @Size(min = 8, max = 255) String password,
             @NotBlank(message = "") @Size(min = 8, max = 255) String email,
             @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}") String phone, @Size(min = 2, max = 64) String country) {

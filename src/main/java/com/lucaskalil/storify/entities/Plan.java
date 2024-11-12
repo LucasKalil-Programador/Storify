@@ -2,6 +2,8 @@ package com.lucaskalil.storify.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,14 +12,13 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lucaskalil.storify.entities.enums.PlanType;
 
 @Entity
 @Table(name = "plan")
 public class Plan implements Serializable {
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
@@ -27,21 +28,16 @@ public class Plan implements Serializable {
     @Column(nullable = false)
     private Long capacity;
 
-    @JsonIgnore
-    @Column(nullable = true, length = 255, unique = true)
-    private String metadata;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private PlanType type;
 
     public Plan() {}
 
-    public Plan(String name, Long capacity, String metadata) {
+    public Plan(String name, Long capacity, PlanType type) {
         this.name = name;
         this.capacity = capacity;
-        this.metadata = metadata;
-    }
-
-    public Plan(String name, Long capacity) {
-        this.name = name;
-        this.capacity = capacity;
+        this.type = type;
     }
 
     public UUID getId() {
@@ -68,11 +64,11 @@ public class Plan implements Serializable {
         this.capacity = capacity;
     }
 
-    public String getMetadata() {
-        return metadata;
+    public PlanType getType() {
+        return type;
     }
 
-    public void setMetadata(String metadata) {
-        this.metadata = metadata;
+    public void setType(PlanType type) {
+        this.type = type;
     }
 }

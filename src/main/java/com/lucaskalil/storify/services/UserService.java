@@ -1,5 +1,7 @@
 package com.lucaskalil.storify.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ public class UserService {
         return repository.save(newUser);
     }
 
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return repository.findByEmail(email);
     }
 }

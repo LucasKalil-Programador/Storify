@@ -12,7 +12,7 @@
 	<artifactId>storify</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>storify</name>
-	<description>Demo project for Spring Boot</description>
+	<description>storify is a storage system</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -58,9 +58,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.mindrot</groupId>
-			<artifactId>jbcrypt</artifactId>
-			<version>0.4</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 	</dependencies>
 

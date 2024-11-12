@@ -1,5 +1,6 @@
 package com.lucaskalil.storify.repositories;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +11,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     public boolean existsByEmail(String email);
 
-    public User findByEmail(String email);
+    public Optional<User> findByEmail(String email);
 }

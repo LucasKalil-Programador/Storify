@@ -15,6 +15,7 @@ import com.lucaskalil.storify.entities.User;
 import com.lucaskalil.storify.entities.enums.AccessSettings;
 import com.lucaskalil.storify.entities.enums.FileType;
 import com.lucaskalil.storify.entities.enums.ModifySettings;
+import com.lucaskalil.storify.entities.enums.PlanType;
 import com.lucaskalil.storify.entities.enums.PrivacySettings;
 import com.lucaskalil.storify.entities.enums.UserStatus;
 import com.lucaskalil.storify.repositories.AlbumRepository;
@@ -44,9 +45,9 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Inicializando banco de dados...");
 
-        planRepository.save(new Plan("Plano Básico", 100L, "default"));
-        planRepository.save(new Plan("Plano Avançado", 500L));
-        Plan primiumPlan = planRepository.save(new Plan("Plano Premium", 1000L));
+        planRepository.save(new Plan("Plano Básico", 100L, PlanType.DEFAULT));
+        planRepository.save(new Plan("Plano Avançado", 500L, PlanType.BASIC));
+        Plan primiumPlan = planRepository.save(new Plan("Plano Premium", 1000L, PlanType.PREMIUM));
 
         User user = userRepository.save(new User("Lucas Kalil", "lucas.kalil2018@gmail.com", "pwd", primiumPlan, 0L, Instant.now(), Instant.now(), UserStatus.NO_PROBLEMS, "+55 (71) 99337-0283", "Brasil"));
    

@@ -1,10 +1,10 @@
-package com.lucaskalil.storify.dto;
+package com.lucaskalil.storify.controller.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class LoginUserDTO {
+public class LoginRequest {
 
     @NotBlank(message = "Password cannot be empty.")
     @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters.")
@@ -17,9 +17,9 @@ public class LoginUserDTO {
 
     
 
-    public LoginUserDTO() {}
+    public LoginRequest() {}
 
-    public LoginUserDTO(
+    public LoginRequest(
             @NotBlank(message = "Password cannot be empty.") @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters.") String password,
             @NotBlank(message = "Email cannot be empty.") @Size(min = 8, max = 255, message = "Email must be between 8 and 255 characters.") @Email(message = "Email should be valid.") String email) {
         this.password = password;
