@@ -31,12 +31,5 @@ public class ExceptionHandlers {
         errors.put("error", "Request body is missing or malformed. Ensure the JSON is properly formatted.");
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Map<String, String>> handleJsonParseException(BadCredentialsException ex) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error", ex.getMessage());
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
 }
 

@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lucaskalil.storify.Exceptions.UserAlreadyExistsException;
+import com.lucaskalil.storify.controller.dto.ErrorResponse;
 import com.lucaskalil.storify.controller.dto.LoginRequest;
 import com.lucaskalil.storify.controller.dto.LoginResponse;
 import com.lucaskalil.storify.controller.dto.RegisterRequest;
@@ -30,6 +30,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -50,7 +51,7 @@ public class UserController {
  
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         User newUser = new User(
             registerRequest.getUsername(), 
             registerRequest.getEmail(), 
@@ -66,20 +67,25 @@ public class UserController {
             URI uri = ServletUriComponentsBuilder.fromPath("/api/user/login").buildAndExpand(newUser.getId()).toUri();
             return ResponseEntity.created(uri).body(RegisterResponse.fromUser(newUser));
         } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            var errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "User with this email already exists"
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         Optional<User> user = userService.findByEmail(loginRequest.getEmail());
-        boolean is_valid = false;
-        if(user.isPresent()) {    
-            is_valid = passwordEncoder.matches(loginRequest.getPassword(), user.get().getPasswordHash());
-        }
-       
+        boolean is_valid = user.isPresent() && passwordEncoder.matches(loginRequest.getPassword(), user.get().getPasswordHash());
+
         if(!is_valid) {
-            throw new BadCredentialsException("email or password is invalid");
+            var errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Invalid email or password"
+            );
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
 
         Instant now = Instant.now();
@@ -97,3 +103,5 @@ public class UserController {
         return ResponseEntity.ok(new LoginResponse(jwtToken, expiresAt));
     }
 }
+
+
